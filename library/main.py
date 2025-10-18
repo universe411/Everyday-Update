@@ -1,7 +1,7 @@
 from library import Library
 from member import Member
 from book import Book
-#comment
+
 
 def input_numeric_id(prompt: str):
     """Force user to input a numeric ID."""
@@ -11,7 +11,7 @@ def input_numeric_id(prompt: str):
             return user_input
         else:
             print("❌ ID must be numeric. Please try again.")
-
+#W Why would user needs to input their own user id? Should it be handled by the library? and why do we have this func here instead of withih choice1?
 
 def main():
     library = Library()
@@ -31,6 +31,9 @@ def main():
 
         choice = input("Choose an option (0-9): ")
 
+        # if/elif/else can work, but there are better ways to do this, ask chatgpt for help and come up a cleaner way
+        # you have the point system setup in member class, but I don't see any increase/decrease system for it
+
         # 0. Exit
         if choice == "0":
             print("886! 👋")
@@ -46,7 +49,7 @@ def main():
                 continue
 
             name = input("Enter name: ")
-            phone = input("Enter phone number: ")
+            phone = input("Enter phone number: ") # Think about validations for these input types
 
             member = Member(member_id, name, phone)
             library.add_member(member)
@@ -54,7 +57,7 @@ def main():
 
         # 2. Recharge
         elif choice == "2":
-            member_id = input_numeric_id("Enter member ID: ")
+            member_id = input_numeric_id("Enter member ID: ") 
             member = library.find_member(member_id)
             if not member:
                 print("❌ Member not found.")
@@ -64,11 +67,11 @@ def main():
                 if amount <= 0:
                     print("❌ Amount must be positive.")
                     continue
-            except ValueError:
+            except ValueError: # good use of try/except
                 print("❌ Invalid number.")
                 continue
 
-            member.recharge(amount)
+            member.recharge(amount) # should notify the outcome, confirm the recharge
 
         # 3. Upgrade to VIP
         elif choice == "3":
@@ -78,11 +81,11 @@ def main():
                 print("❌ Member not found.")
                 continue
             new_member = member.upgrade_to_vip()
-            library.members[member_id] = new_member  # 替换为 VIP
+            library.members[member_id] = new_member  # 替换为 VIP  # This is not the best practice of upgrading member to vip, think better. Also notify the outcome
 
         # 44. add Book
         elif choice == "4":
-            book_id = input_numeric_id("Enter book ID (numbers only): ")
+            book_id = input_numeric_id("Enter book ID (numbers only): ") # Again, if you are adding a book, why would you have an id first? 
 
             # 检查重复
             if book_id in library.books:
@@ -91,8 +94,7 @@ def main():
 
             name = input("Enter book name: ")
             author = input("Enter author: ")
-            book_type = input("Enter type (e.g. Novel, Sci-Fi): ")
-
+            book_type = input("Enter type (e.g. Novel, Sci-Fi): ") # use enum for book types.
             book = Book(book_id, name, author, book_type)
             library.add_book(book)
             print(f"✅ Book '{name}' added successfully.")
@@ -101,18 +103,18 @@ def main():
         elif choice == "5":
             book_id = input_numeric_id("Enter book ID: ")
             member_id = input_numeric_id("Enter member ID: ")
-            borrow_date = input("Enter borrow date (YYYY-MM-DD): ")
+            borrow_date = input("Enter borrow date (YYYY-MM-DD): ") # why does user have to enter borrow date? think a better apporach
             library.borrow_book(book_id, member_id, borrow_date)
 
         # 6. Return Book
         elif choice == "6":
             member_id = input_numeric_id("Enter member ID: ")
             book_id = input_numeric_id("Enter book ID: ")
-            return_date = input("Enter return date (YYYY-MM-DD): ")
+            return_date = input("Enter return date (YYYY-MM-DD): ") 
 
             # 查找未归还记录
             found_record = None
-            for record in library.records.values():
+            for record in library.records.values(): # this looks like a helper method that should be in record class.
                 if (
                     record.member_id == member_id
                     and record.book_id == book_id
@@ -125,7 +127,7 @@ def main():
                 print("❌ No active borrow record found for this member and book.")
                 continue
 
-            library.return_book(found_record.record_id, return_date)
+            library.return_book(found_record.record_id, return_date) # where's the print for how much money did the memeber pay for borrowing and how much they have left in their balance?
 
         # 7. View Member Info
         elif choice == "7":
@@ -157,6 +159,6 @@ def main():
         else:
             print("❌ Invalid option. Please enter 0-9.")
 
-
+                  
 if __name__ == "__main__":
     main()
