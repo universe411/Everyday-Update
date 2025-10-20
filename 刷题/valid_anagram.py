@@ -27,3 +27,5 @@ class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
 
         # s和t的长度要一样 然后每个字母的字数得一样 然后创建dictionary 查找？
+        if len(s) == len(t):
+            number_s = {}, number_t = {}
