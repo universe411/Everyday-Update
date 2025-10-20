@@ -35,9 +35,11 @@ class Solution:
         count_s = {}
         count_t = {}
 
-        for i in range(len(s)):
-            # 用get，如果s[i]的value在countS里，那么就+1，如果没有，那么return default value 0
-            count_s[s[i]] = 1 + count_s.get(s[i], 0)
-            count_t[s[i]] = 1 + count_t.get(t[i], 0)
+        # enumerate： enumerate(iterable, start=0)
+        # 同时取key 和 value
+
+        for i, ch in enumerate(s):
+            count_s[ch] = 1 + count_s.get(ch, 0)
+            count_t[t[i]] = 1 + count_t.get(t[i], 0)
 
         return count_s == count_t
